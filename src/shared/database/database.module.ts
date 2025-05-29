@@ -14,9 +14,7 @@ import { databaseProviders } from './database.providers';
       entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
       // logging: 'all',
       synchronize: process.env.SYNC_DB ? true : false,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      ssl: false,
     }),
   ],
   providers: [...databaseProviders],
