@@ -14,7 +14,7 @@ export class ProducerRepository {
   private readonly logger = new Logger(ProducerRepository.name);
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
-  async create(createProducerDto: CreateProducerDto) {
+  async create(createProducerDto: CreateProducerDto): Promise<ProducerEntity> {
     try {
       this.logger.log(
         '[DB]Criando produtor createProducerDto: ' +
@@ -30,7 +30,7 @@ export class ProducerRepository {
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<ProducerEntity[]> {
     try {
       this.logger.log('[DB]Buscando todos os produtores');
       return this.manager.find(ProducerEntity);
@@ -42,7 +42,7 @@ export class ProducerRepository {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<ProducerEntity> {
     try {
       this.logger.log(`[DB]Buscando produtor com ID: ${id}`);
       const producer = await this.manager.findOne(ProducerEntity, {
@@ -63,7 +63,10 @@ export class ProducerRepository {
     }
   }
 
-  async update(id: string, updateProducerDto: Partial<CreateProducerDto>) {
+  async update(
+    id: string,
+    updateProducerDto: Partial<CreateProducerDto>,
+  ): Promise<ProducerEntity> {
     try {
       this.logger.log(
         `[DB]Atualizando produtor com id: ${id} updateProducerDto: ${JSON.stringify(updateProducerDto)}`,
@@ -82,7 +85,7 @@ export class ProducerRepository {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<{ message: string }> {
     try {
       this.logger.log(`[DB]Removendo produtor com id: ${id}`);
       await this.manager.update(ProducerEntity, id, {
@@ -101,7 +104,7 @@ export class ProducerRepository {
     }
   }
 
-  async findOneByCpfCnpj(cpfCnpj: string) {
+  async findOneByCpfCnpj(cpfCnpj: string): Promise<ProducerEntity | null> {
     try {
       this.logger.log(`[DB]Buscando produtor com CPF/CNPJ: ${cpfCnpj}`);
       return this.manager.findOne(ProducerEntity, {

@@ -14,7 +14,7 @@ export class FarmRepository {
   private readonly logger = new Logger(FarmRepository.name);
   constructor(@InjectEntityManager() private readonly manager: EntityManager) {}
 
-  async create(createFarmDto: CreateFarmDto) {
+  async create(createFarmDto: CreateFarmDto): Promise<FarmEntity> {
     try {
       this.logger.log(
         'Criando fazenda createFarmDto: ' + JSON.stringify(createFarmDto),
@@ -32,7 +32,7 @@ export class FarmRepository {
     }
   }
 
-  async findAll() {
+  async findAll(): Promise<FarmEntity[]> {
     try {
       this.logger.log('[DB]Buscando todas as fazendas');
       return this.manager.find(FarmEntity);
@@ -44,7 +44,7 @@ export class FarmRepository {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<FarmEntity> {
     try {
       this.logger.log(`[DB]Buscando fazenda com ID: ${id}`);
       const farm = await this.manager.findOne(FarmEntity, { where: { id } });
@@ -63,7 +63,10 @@ export class FarmRepository {
     }
   }
 
-  async update(id: string, updateFarmDto: Partial<CreateFarmDto>) {
+  async update(
+    id: string,
+    updateFarmDto: Partial<CreateFarmDto>,
+  ): Promise<FarmEntity> {
     try {
       this.logger.log(`[DB]Atualizando fazenda com ID: ${id}`);
       const farm = await this.findOne(id);
@@ -80,7 +83,7 @@ export class FarmRepository {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<{ message: string }> {
     try {
       this.logger.log(`[DB]Removendo fazenda com ID: ${id}`);
       await this.manager.delete(FarmEntity, { id });

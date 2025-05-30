@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { HarvestEntity } from 'src/modules/harvest/entities/harvest.entity';
 import { ProducerEntity } from 'src/modules/producer/entities/producer.entity';
 import {
   Column,
@@ -6,6 +7,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -77,6 +79,9 @@ export class FarmEntity {
   @ManyToOne(() => ProducerEntity, (producer) => producer.farms)
   @JoinColumn({ name: 'producer_id' })
   producer: ProducerEntity;
+
+  @OneToMany(() => HarvestEntity, (harvest) => harvest.farm)
+  harvests: HarvestEntity[];
 
   @ApiProperty({
     description: 'Data de criação',
