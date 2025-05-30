@@ -81,8 +81,11 @@ DATABASE_PASSWORD=root
 DATABASE_DB=brain
 SYNC_DB=false
 PORT=3000
+NODE_ENV=development
 
 # Instalação
+$ npm install
+# ou
 $ yarn install
 
 # Docker

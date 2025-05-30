@@ -7,7 +7,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CultureService } from './culture.service';
 import { CreateCultureDto } from './dto/create-culture.dto';
 import { UpdateCultureDto } from './dto/update-culture.dto';
@@ -15,6 +20,7 @@ import { CultureEntity } from './entities/culture.entity';
 
 @Controller('culture')
 @ApiTags('Culture')
+@ApiBearerAuth('access-token')
 export class CultureController {
   constructor(private readonly cultureService: CultureService) {}
 

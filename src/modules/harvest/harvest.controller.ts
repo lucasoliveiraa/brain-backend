@@ -7,7 +7,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { UpdateHarvestDto } from './dto/update-harvest.dto';
 import { HarvestEntity } from './entities/harvest.entity';
@@ -15,6 +20,7 @@ import { HarvestService } from './harvest.service';
 
 @Controller('harvest')
 @ApiTags('Harvest')
+@ApiBearerAuth('access-token')
 export class HarvestController {
   constructor(private readonly harvestService: HarvestService) {}
 
