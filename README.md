@@ -6,12 +6,13 @@ Aplicação backend desenvolvida com NestJS para o gerenciamento de produtores r
 
 ## 📦 Tecnologias Utilizadas
 
-- **NestJS** (com TypeORM)
+- **NestJS**
 - **PostgreSQL**
+- **TypeORM**
 - **Swagger (OpenAPI)**
 - **Class-validator**
 - **Arquitetura em camadas**
-- **Docker (opcional)**
+- **Docker**
 
 ---
 
@@ -54,7 +55,7 @@ src/
 │   ├── dashboard/
 ├── shared/
 ├── main.ts
-
+```
 
 ---
 
@@ -68,8 +69,44 @@ src/
 
 ## 📦 Instalação
 
-1. **Clone o repositório:**
+```bash
+$ git clone https://github.com/lucasoliveiraa/brain-backend.git
+$ cd brain-backend
+
+# .env
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASSWORD=root
+DATABASE_DB=brain
+SYNC_DB=false
+PORT=3000
+
+# Instalação
+$ yarn install
+
+# Docker
+$ docker compose up -d
+
+# modo desenvolvimento com watch
+$ npm run start:dev
+
+# ou
+$ yarn start:dev
+```
+
+## 📚 Documentação da API
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+$ http://localhost:3000/v1/brain/doc
+```
+
+---
+
+<p align="center">
+  <img  alt="Diagrama ER" src="github/diagram-brain.png">
+</p>
+
+## 🚀 Tecnologias
+
+Made with 💜 by Lucas Oliveira 👋 [See my linkedin](https://www.linkedin.com/in/lucas-da-costa-oliveira-b75b30125/)
