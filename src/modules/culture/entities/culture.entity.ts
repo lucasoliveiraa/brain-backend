@@ -18,7 +18,7 @@ export class CultureEntity {
     type: 'string',
     example: 'Soja',
   })
-  @Column({ unique: true })
+  @Column({ name: 'name', unique: true })
   name: string;
 
   @OneToMany(

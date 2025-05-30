@@ -15,7 +15,7 @@ import { CulturePlantedEntity } from './culture-planted.entity';
 @Entity({ name: 'harvest' })
 export class HarvestEntity {
   @ApiProperty({
-    description: 'Identificador único da colheita',
+    description: 'Identificador único da safra',
     type: 'string',
     format: 'uuid',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -32,7 +32,7 @@ export class HarvestEntity {
   name: string;
 
   @ApiProperty({
-    description: 'Ano da colheita',
+    description: 'Ano da safra',
     type: 'number',
     example: 2023,
   })

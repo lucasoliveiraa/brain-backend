@@ -16,67 +16,64 @@ export class HarvestService {
 
   create(createHarvestDto: CreateHarvestDto) {
     try {
-      this.logger.log('Criando uma nova colheita', createHarvestDto);
+      this.logger.log('Criando uma nova safra', createHarvestDto);
       return this.harvestRepository.create(createHarvestDto);
     } catch (error) {
-      this.logger.error('Erro ao criar colheita', error.message);
+      this.logger.error('Erro ao criar safra', error.message);
       throw new InternalServerErrorException(
-        error?.message || 'Falha ao criar colheita',
+        error?.message || 'Falha ao criar safra',
       );
     }
   }
 
   findAll() {
     try {
-      this.logger.log('Buscando todas as colheitas');
+      this.logger.log('Buscando todas as safras');
       return this.harvestRepository.findAll();
     } catch (error) {
-      this.logger.error('Erro ao buscar colheitas', error.message);
+      this.logger.error('Erro ao buscar safras', error.message);
       throw new InternalServerErrorException(
-        error?.message || 'Falha ao buscar colheitas',
+        error?.message || 'Falha ao buscar safras',
       );
     }
   }
 
   findOne(id: string) {
     try {
-      this.logger.log(`Buscando colheita com ID: ${id}`);
+      this.logger.log(`Buscando safra com ID: ${id}`);
       return this.harvestRepository.findOne(id);
     } catch (error) {
-      this.logger.error(`Erro ao buscar colheita com ID ${id}`, error.message);
+      this.logger.error(`Erro ao buscar safra com ID ${id}`, error.message);
       throw new InternalServerErrorException(
-        error?.message || `Falha ao buscar colheita com ID ${id}`,
+        error?.message || `Falha ao buscar safra com ID ${id}`,
       );
     }
   }
 
   update(id: string, updateHarvestDto: UpdateHarvestDto) {
     try {
-      this.logger.log(`Atualizando colheita com ID: ${id}`, updateHarvestDto);
+      this.logger.log(`Atualizando safra com ID: ${id}`, updateHarvestDto);
       return this.harvestRepository.update(id, updateHarvestDto);
     } catch (error) {
-      this.logger.error(
-        `Erro ao atualizar colheita com ID ${id}`,
-        error.message,
-      );
+      this.logger.error(`Erro ao atualizar safra com ID ${id}`, error.message);
       throw new InternalServerErrorException(
-        error?.message || `Falha ao atualizar colheita com ID ${id}`,
+        error?.message || `Falha ao atualizar safra com ID ${id}`,
       );
     }
   }
 
   remove(id: string) {
     try {
-      this.logger.log(`Removendo colheita com ID: ${id}`);
+      this.logger.log(`Removendo safra com ID: ${id}`);
       const harvest = this.findOne(id);
       if (!harvest) {
-        throw new NotFoundException(`Colheita com ID ${id} não encontrada`);
+        throw new NotFoundException(`safra com ID ${id} não encontrada`);
       }
       return this.harvestRepository.remove(id);
     } catch (error) {
-      this.logger.error(`Erro ao remover colheita com ID ${id}`, error.message);
+      this.logger.error(`Erro ao remover safra com ID ${id}`, error.message);
       throw new InternalServerErrorException(
-        error?.message || `Falha ao remover colheita com ID ${id}`,
+        error?.message || `Falha ao remover safra com ID ${id}`,
       );
     }
   }

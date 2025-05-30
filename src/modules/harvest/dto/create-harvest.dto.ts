@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  ArrayNotEmpty,
+  IsArray,
   IsNotEmpty,
   IsNumber,
   IsPositive,
@@ -18,7 +20,7 @@ export class CreateHarvestDto {
   name: string;
 
   @ApiProperty({
-    description: 'Ano da colheita',
+    description: 'Ano da safra',
     example: 2023,
     required: true,
   })
@@ -28,10 +30,24 @@ export class CreateHarvestDto {
   year: number;
 
   @ApiProperty({
-    description: 'ID da fazenda associada à colheita',
+    description: 'ID da fazenda associada à safra',
     example: '123e4567-e89b-12d3-a456-426614174000',
     required: true,
   })
   @IsUUID()
   farmId: string;
+
+  @ApiProperty({
+    description: 'Lista de IDs das culturas plantadas na safra',
+    type: [String],
+    example: [
+      '123e4567-e89b-12d3-a456-426614174001',
+      '123e4567-e89b-12d3-a456-426614174002',
+    ],
+    required: true,
+  })
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsUUID('all', { each: true })
+  culturesIds: string[];
 }

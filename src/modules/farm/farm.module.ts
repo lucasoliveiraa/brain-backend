@@ -9,5 +9,6 @@ import { FarmRepository } from './repositories/farm.repository';
   imports: [TypeOrmModule.forFeature([FarmEntity])],
   controllers: [FarmController],
   providers: [FarmService, FarmRepository],
+  exports: [FarmRepository],
 })
 export class FarmModule {}

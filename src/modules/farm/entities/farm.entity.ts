@@ -32,6 +32,22 @@ export class FarmEntity {
   name: string;
 
   @ApiProperty({
+    description: 'Cidade da fazenda',
+    type: 'string',
+    example: 'Sorocaba',
+  })
+  @Column()
+  city: string;
+
+  @ApiProperty({
+    description: 'Estado da fazenda',
+    type: 'string',
+    example: 'SP',
+  })
+  @Column()
+  state: string;
+
+  @ApiProperty({
     description: 'Area total da fazenda em hectares',
     type: 'number',
     example: 130.0,

@@ -7,13 +7,14 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CultureService } from './culture.service';
 import { CreateCultureDto } from './dto/create-culture.dto';
 import { UpdateCultureDto } from './dto/update-culture.dto';
 import { CultureEntity } from './entities/culture.entity';
 
 @Controller('culture')
+@ApiTags('Culture')
 export class CultureController {
   constructor(private readonly cultureService: CultureService) {}
 

@@ -5,6 +5,9 @@ import {
   IsPositive,
   IsString,
   IsUUID,
+  Matches,
+  MaxLength,
+  MinLength,
   Validate,
 } from 'class-validator';
 import { AreaLengthValidator } from '../validators/area-length.validator';
@@ -18,6 +21,29 @@ export class CreateFarmDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @ApiProperty({
+    description: 'Cidade da fazenda',
+    example: 'Sorocaba',
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  city: string;
+
+  @ApiProperty({
+    description: 'Estado da fazenda',
+    example: 'SP',
+    required: true,
+  })
+  @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  @Matches(/^[A-Z]{2}$/, {
+    message: 'Estado deve ser uma sigla de 2 letras maiúsculas',
+  })
+  @IsNotEmpty()
+  state: string;
 
   @ApiProperty({
     description: 'Área total da fazenda em hectares',

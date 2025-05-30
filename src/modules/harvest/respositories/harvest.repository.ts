@@ -4,9 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
+import { CultureEntity } from 'src/modules/culture/entities/culture.entity';
 import { EntityManager } from 'typeorm';
 import { CreateHarvestDto } from '../dto/create-harvest.dto';
 import { UpdateHarvestDto } from '../dto/update-harvest.dto';
+import { CulturePlantedEntity } from '../entities/culture-planted.entity';
 import { HarvestEntity } from '../entities/harvest.entity';
 
 export class HarvestRepository {
@@ -16,51 +18,59 @@ export class HarvestRepository {
   async create(createHarvestDto: CreateHarvestDto): Promise<HarvestEntity> {
     try {
       this.logger.log(
-        'Criando colheita createHarvestDto: ' +
-          JSON.stringify(createHarvestDto),
+        '[DB]Criando safra com DTO: ' + JSON.stringify(createHarvestDto),
       );
-      const harvest = this.manager.create(HarvestEntity, {
-        ...createHarvestDto,
-        farm: { id: createHarvestDto.farmId },
+
+      const { name, year, farmId, culturesIds } = createHarvestDto;
+
+      const culturesPlanteds = culturesIds.map((id) => {
+        const cp = new CulturePlantedEntity();
+        cp.culture = { id } as CultureEntity;
+        return cp;
       });
-      return await this.manager.save(harvest);
+
+      const safra = this.manager.create(HarvestEntity, {
+        name,
+        year,
+        farm: { id: farmId },
+        culturePlanteds: culturesPlanteds,
+      });
+
+      return await this.manager.save(safra);
     } catch (error) {
-      this.logger.error('[DB]Erro ao criar colheita', error.message);
+      this.logger.error('[DB]Erro ao criar safra', error.message);
       throw new InternalServerErrorException(
-        error.message || '[DB]Falha ao criar colheita',
+        error.message || '[DB]Falha ao criar safra',
       );
     }
   }
 
   async findAll(): Promise<HarvestEntity[]> {
     try {
-      this.logger.log('[DB]Buscando todas as colheitas');
+      this.logger.log('[DB]Buscando todas as safras');
       return await this.manager.find(HarvestEntity);
     } catch (error) {
-      this.logger.error('[DB]Erro ao buscar colheitas', error.message);
+      this.logger.error('[DB]Erro ao buscar safras', error.message);
       throw new InternalServerErrorException(
-        error.message || '[DB]Falha ao buscar colheitas',
+        error.message || '[DB]Falha ao buscar safras',
       );
     }
   }
 
   async findOne(id: string): Promise<HarvestEntity> {
     try {
-      this.logger.log(`[DB]Buscando colheita com ID: ${id}`);
+      this.logger.log(`[DB]Buscando safra com ID: ${id}`);
       const harvest = await this.manager.findOne(HarvestEntity, {
         where: { id },
       });
       if (!harvest) {
-        throw new NotFoundException(`[DB]Colheita com ID ${id} não encontrada`);
+        throw new NotFoundException(`[DB]Safra com ID ${id} não encontrada`);
       }
       return harvest;
     } catch (error) {
-      this.logger.error(
-        `[DB]Erro ao buscar colheita com ID ${id}`,
-        error.message,
-      );
+      this.logger.error(`[DB]Erro ao buscar safra com ID ${id}`, error.message);
       throw new InternalServerErrorException(
-        error.message || `[DB]Falha ao buscar colheita com ID ${id}`,
+        error.message || `[DB]Falha ao buscar safra com ID ${id}`,
       );
     }
   }
@@ -71,38 +81,38 @@ export class HarvestRepository {
   ): Promise<HarvestEntity> {
     try {
       this.logger.log(
-        `[DB]Atualizando colheita com ID: ${id} updateHarvestDto: ${JSON.stringify(updateHarvestDto)}`,
+        `[DB]Atualizando safra com ID: ${id} updateHarvestDto: ${JSON.stringify(updateHarvestDto)}`,
       );
       const harvest = await this.findOne(id);
       if (!harvest) {
-        throw new NotFoundException(`[DB]Colheita com ID ${id} não encontrada`);
+        throw new NotFoundException(`[DB]Safra com ID ${id} não encontrada`);
       }
       Object.assign(harvest, updateHarvestDto);
       return await this.manager.save(harvest);
     } catch (error) {
       this.logger.error(
-        `[DB]Erro ao atualizar colheita com ID ${id}`,
+        `[DB]Erro ao atualizar safra com ID ${id}`,
         error.message,
       );
       throw new InternalServerErrorException(
-        error.message || `[DB]Falha ao atualizar colheita com ID ${id}`,
+        error.message || `[DB]Falha ao atualizar safra com ID ${id}`,
       );
     }
   }
 
   async remove(id: string): Promise<{ message: string }> {
     try {
-      this.logger.log(`[DB]Removendo colheita com ID: ${id}`);
+      this.logger.log(`[DB]Removendo safra com ID: ${id}`);
       await this.manager.delete(HarvestEntity, { id });
-      this.logger.log(`[DB]Colheita com ID ${id} removida com sucesso`);
-      return { message: `Colheita com ID ${id} removida com sucesso` };
+      this.logger.log(`[DB]Safra com ID ${id} removida com sucesso`);
+      return { message: `Safra com ID ${id} removida com sucesso` };
     } catch (error) {
       this.logger.error(
-        `[DB]Erro ao remover colheita com ID ${id}`,
+        `[DB]Erro ao remover safra com ID ${id}`,
         error.message,
       );
       throw new InternalServerErrorException(
-        error.message || `[DB]Falha ao remover colheita com ID ${id}`,
+        error.message || `[DB]Falha ao remover safra com ID ${id}`,
       );
     }
   }

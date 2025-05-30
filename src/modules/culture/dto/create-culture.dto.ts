@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCultureDto {
   @ApiProperty({
@@ -7,5 +8,7 @@ export class CreateCultureDto {
     example: 'Soja',
     required: true,
   })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 }

@@ -7,24 +7,25 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateHarvestDto } from './dto/create-harvest.dto';
 import { UpdateHarvestDto } from './dto/update-harvest.dto';
 import { HarvestEntity } from './entities/harvest.entity';
 import { HarvestService } from './harvest.service';
 
 @Controller('harvest')
+@ApiTags('Harvest')
 export class HarvestController {
   constructor(private readonly harvestService: HarvestService) {}
 
   @Post()
   @ApiOkResponse({
-    description: 'Colheita criada com sucesso.',
+    description: 'Safra criada com sucesso.',
     type: HarvestEntity,
   })
   @ApiOperation({
-    summary: 'Criar uma nova colheita',
-    description: 'Cria uma nova colheita no sistema.',
+    summary: 'Criar uma nova safra',
+    description: 'Cria uma nova safra no sistema.',
   })
   create(@Body() createHarvestDto: CreateHarvestDto) {
     return this.harvestService.create(createHarvestDto);
@@ -32,12 +33,12 @@ export class HarvestController {
 
   @Get()
   @ApiOkResponse({
-    description: 'Lista de colheitas recuperada com sucesso.',
+    description: 'Lista de safras recuperada com sucesso.',
     type: [HarvestEntity],
   })
   @ApiOperation({
-    summary: 'Buscar todas as colheitas',
-    description: 'Busca uma lista de todas as colheitas cadastradas.',
+    summary: 'Buscar todas as safras',
+    description: 'Busca uma lista de todas as safras cadastradas.',
   })
   findAll() {
     return this.harvestService.findAll();
@@ -45,12 +46,12 @@ export class HarvestController {
 
   @Get(':id')
   @ApiOkResponse({
-    description: 'Colheita recuperada com sucesso.',
+    description: 'Safra recuperada com sucesso.',
     type: HarvestEntity,
   })
   @ApiOperation({
-    summary: 'Buscar uma colheita por ID',
-    description: 'Busca uma colheita específica pelo seu ID.',
+    summary: 'Buscar uma safra por ID',
+    description: 'Busca uma safra específica pelo seu ID.',
   })
   findOne(@Param('id') id: string) {
     return this.harvestService.findOne(id);
@@ -58,12 +59,12 @@ export class HarvestController {
 
   @Patch(':id')
   @ApiOkResponse({
-    description: 'Colheita atualizada com sucesso.',
+    description: 'Safra atualizada com sucesso.',
     type: HarvestEntity,
   })
   @ApiOperation({
-    summary: 'Atualizar uma colheita existente',
-    description: 'Atualiza uma colheita existente no sistema.',
+    summary: 'Atualizar uma safra existente',
+    description: 'Atualiza uma safra existente no sistema.',
   })
   update(@Param('id') id: string, @Body() updateHarvestDto: UpdateHarvestDto) {
     return this.harvestService.update(id, updateHarvestDto);
@@ -71,12 +72,12 @@ export class HarvestController {
 
   @Delete(':id')
   @ApiOkResponse({
-    description: 'Colheita removida com sucesso.',
+    description: 'Safra removida com sucesso.',
     type: HarvestEntity,
   })
   @ApiOperation({
-    summary: 'Remover uma colheita por ID',
-    description: 'Remove uma colheita específica pelo seu ID.',
+    summary: 'Remover uma safra por ID',
+    description: 'Remove uma safra específica pelo seu ID.',
   })
   remove(@Param('id') id: string) {
     return this.harvestService.remove(id);
