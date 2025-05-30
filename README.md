@@ -129,7 +129,7 @@ Swagger:
 ## 📚 Diagrama ER
 
 <p align="center">
-  <img  alt="Diagrama ER" src="github/diagram-brain.png">
+  <img  alt="Diagrama ER" src="github/diagram-brain-new.png">
 </p>
 
 ## 🚀 Autor
