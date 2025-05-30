@@ -107,6 +107,6 @@ $ http://localhost:3000/v1/brain/doc
   <img  alt="Diagrama ER" src="github/diagram-brain.png">
 </p>
 
-## 🚀 Tecnologias
+## 🚀 Autor
 
 Made with 💜 by Lucas Oliveira 👋 [See my linkedin](https://www.linkedin.com/in/lucas-da-costa-oliveira-b75b30125/)
