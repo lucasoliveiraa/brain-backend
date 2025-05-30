@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { CreateProducerDto } from '../dto/create-producer.dto';
@@ -12,82 +17,105 @@ export class ProducerRepository {
   async create(createProducerDto: CreateProducerDto) {
     try {
       this.logger.log(
-        'Creating producer with data: ' + JSON.stringify(createProducerDto),
+        '[DB]Criando produtor createProducerDto: ' +
+          JSON.stringify(createProducerDto),
       );
-      const existingProducer = await this.manager.findOne(ProducerEntity, {
-        where: { cpfCnpj: createProducerDto.cpfCnpj },
-        withDeleted: true, // Include deleted records in the search
-      });
-
-      if (existingProducer) {
-        this.logger.warn(
-          `Producer with CPF/CNPJ ${createProducerDto.cpfCnpj} already exists.`,
-        );
-        throw new BadRequestException(
-          `Producer with CPF/CNPJ ${createProducerDto.cpfCnpj} already exists.`,
-        );
-      }
-
       const producer = this.manager.create(ProducerEntity, createProducerDto);
       return this.manager.save(producer);
     } catch (error) {
-      this.logger.error('Error creating producer', error.message);
-      throw new BadRequestException(
-        error.message || 'Failed to create producer',
+      this.logger.error('[DB]Erro ao criar produtor', error.message);
+      throw new InternalServerErrorException(
+        error.message || '[DB]Falha ao criar produtor',
       );
     }
   }
 
   async findAll() {
     try {
-      this.logger.log('Fetching all producers');
+      this.logger.log('[DB]Buscando todos os produtores');
       return this.manager.find(ProducerEntity);
     } catch (error) {
-      this.logger.error('Error fetching producers', error.message);
-      throw new BadRequestException('Failed to fetch producers');
+      this.logger.error('[DB]Erro ao buscar produtores', error.message);
+      throw new InternalServerErrorException(
+        error.message || '[DB]Falha ao buscar produtores',
+      );
     }
   }
 
   async findOne(id: string) {
     try {
-      this.logger.log(`Fetching producer with id: ${id}`);
+      this.logger.log(`[DB]Buscando produtor com ID: ${id}`);
       const producer = await this.manager.findOne(ProducerEntity, {
         where: { id },
       });
       if (!producer) {
-        throw new BadRequestException(`Producer with id ${id} not found`);
+        throw new NotFoundException(`[DB]Produtor com id ${id} não encontrado`);
       }
       return producer;
     } catch (error) {
-      this.logger.error(`Error fetching producer with id ${id}`, error.message);
-      throw new BadRequestException(`Failed to fetch producer with id ${id}`);
+      this.logger.error(
+        `[DB]Erro ao buscar produtor com id ${id}`,
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        error.message || `[DB]Falha ao buscar produtor com id ${id}`,
+      );
     }
   }
 
   async update(id: string, updateProducerDto: Partial<CreateProducerDto>) {
     try {
-      this.logger.log(`Updating producer with id: ${id}`);
+      this.logger.log(
+        `[DB]Atualizando produtor com id: ${id} updateProducerDto: ${JSON.stringify(updateProducerDto)}`,
+      );
       const producer = await this.findOne(id);
       Object.assign(producer, updateProducerDto);
       return this.manager.save(producer);
     } catch (error) {
-      this.logger.error(`Error updating producer with id ${id}`, error.message);
-      throw new BadRequestException(`Failed to update producer with id ${id}`);
+      this.logger.error(
+        `[DB]Erro ao atualizar produtor com id ${id}`,
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        error.message || `[DB]Falha ao atualizar produtor com id ${id}`,
+      );
     }
   }
 
   async remove(id: string) {
     try {
-      this.logger.log(`Removing producer with id: ${id}`);
-      const producer = await this.findOne(id);
+      this.logger.log(`[DB]Removendo produtor com id: ${id}`);
       await this.manager.update(ProducerEntity, id, {
         deletedAt: new Date(),
         isDeleted: true,
       });
-      return { message: `Producer with id ${id} removed successfully` };
+      return { message: `Produtor com id ${id} removido com sucesso` };
     } catch (error) {
-      this.logger.error(`Error removing producer with id ${id}`, error.message);
-      throw new BadRequestException(`Failed to remove producer with id ${id}`);
+      this.logger.error(
+        `[DB]Erro ao remover produtor com id ${id}`,
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        error.message || `[DB]Falha ao remover produtor com id ${id}`,
+      );
+    }
+  }
+
+  async findOneByCpfCnpj(cpfCnpj: string) {
+    try {
+      this.logger.log(`[DB]Buscando produtor com CPF/CNPJ: ${cpfCnpj}`);
+      return this.manager.findOne(ProducerEntity, {
+        where: { cpfCnpj },
+        withDeleted: true,
+      });
+    } catch (error) {
+      this.logger.error(
+        `[DB]Erro ao buscar produtor com CPF/CNPJ ${cpfCnpj}`,
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        error.message || `[DB]Falha ao buscar produtor com CPF/CNPJ ${cpfCnpj}`,
+      );
     }
   }
 }

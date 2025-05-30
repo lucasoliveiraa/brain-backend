@@ -1,4 +1,10 @@
-import { HttpException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProducerDto } from '../dto/create-producer.dto';
 import { UpdateProducerDto } from '../dto/update-producer.dto';
 import { ProducerRepository } from '../repositories/producer.repository';
@@ -9,51 +15,86 @@ export class ProducerService {
 
   constructor(private readonly producerRepository: ProducerRepository) {}
 
-  create(createProducerDto: CreateProducerDto) {
+  async create(createProducerDto: CreateProducerDto) {
     try {
+      const existingProducer = await this.producerRepository.findOneByCpfCnpj(
+        createProducerDto.cpfCnpj,
+      );
+
+      if (existingProducer) {
+        this.logger.warn(
+          `Produtor com CPF/CNPJ ${createProducerDto.cpfCnpj} já existe.`,
+        );
+        throw new BadRequestException(
+          `Produtor com CPF/CNPJ ${createProducerDto.cpfCnpj} já existe.`,
+        );
+      }
+
       return this.producerRepository.create(createProducerDto);
     } catch (error) {
-      this.logger.error('Error creating producer', error);
-      throw new HttpException(
-        error?.message || 'Failed to create producer',
-        500,
+      this.logger.error(
+        `Erro ao criar produtor: ${createProducerDto.cpfCnpj}`,
+        error,
+      );
+      throw new InternalServerErrorException(
+        error?.message || 'Falha ao criar produtor',
       );
     }
   }
 
   findAll() {
     try {
+      this.logger.log('Buscando todos os produtores');
       return this.producerRepository.findAll();
     } catch (error) {
-      this.logger.error('Error fetching producers', error);
-      throw new HttpException('Failed to fetch producers', 500);
+      this.logger.error('Erro ao buscar todos os produtores', error);
+      throw new InternalServerErrorException(
+        error?.message || 'Falha ao buscar todos os produtores',
+      );
     }
   }
 
   findOne(id: string) {
     try {
+      this.logger.log(`Buscando produtor com ID: ${id}`);
       return this.producerRepository.findOne(id);
     } catch (error) {
-      this.logger.error(`Error fetching producer with id ${id}`, error);
-      throw new HttpException(`Failed to fetch producer with id ${id}`, 500);
+      this.logger.error(`Erro ao buscar produtor com ID ${id}`, error);
+      throw new InternalServerErrorException(
+        error?.message || `Falha ao buscar produtor com ID ${id}`,
+      );
     }
   }
 
   update(id: string, updateProducerDto: UpdateProducerDto) {
     try {
+      this.logger.log(`Atualizando produtor com ID: ${id}`, updateProducerDto);
       return this.producerRepository.update(id, updateProducerDto);
     } catch (error) {
-      this.logger.error(`Error updating producer with id ${id}`, error);
-      throw new HttpException(`Failed to update producer with id ${id}`, 500);
+      this.logger.error(
+        `Erro ao atualizar produtor com ID ${id}`,
+        error.message,
+      );
+      throw new InternalServerErrorException(
+        error?.message || `Falha ao atualizar produtor com ID ${id}`,
+      );
     }
   }
 
   remove(id: string) {
     try {
+      this.logger.log(`Removendo produtor com ID: ${id}`);
+      const producer = this.producerRepository.findOne(id);
+      if (!producer) {
+        this.logger.warn(`Produtor com ID ${id} não encontrado.`);
+        throw new NotFoundException(`Produtor com ID ${id} não encontrado.`);
+      }
       return this.producerRepository.remove(id);
     } catch (error) {
-      this.logger.error(`Error removing producer with id ${id}`, error);
-      throw new HttpException(`Failed to remove producer with id ${id}`, 500);
+      this.logger.error(`Erro ao remover produtor com ID ${id}`, error.message);
+      throw new InternalServerErrorException(
+        error?.message || `Falha ao remover produtor com ID ${id}`,
+      );
     }
   }
 }

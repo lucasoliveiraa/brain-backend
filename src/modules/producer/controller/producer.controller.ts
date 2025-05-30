@@ -26,12 +26,12 @@ export class ProducerController {
 
   @Post()
   @ApiOkResponse({
-    description: 'Producer created successfully.',
+    description: 'Produtor criado com sucesso.',
     type: ProducerEntity,
   })
   @ApiOperation({
-    summary: 'Create a new producer',
-    description: 'Creates a new producer with the provided details.',
+    summary: 'Criar um novo produtor',
+    description: 'Cria um novo produtor no sistema.',
   })
   create(@Body() createProducerDto: CreateProducerDto) {
     return this.producerService.create(createProducerDto);
@@ -39,12 +39,12 @@ export class ProducerController {
 
   @Get()
   @ApiOkResponse({
-    description: 'List of all producers.',
+    description: 'Lista de produtores recuperada com sucesso.',
     type: [ProducerEntity],
   })
   @ApiOperation({
-    summary: 'Get all producers',
-    description: 'Retrieves a list of all producers in the system.',
+    summary: 'Buscar todos os produtores',
+    description: 'Busca uma lista de todos os produtores cadastrados.',
   })
   findAll() {
     return this.producerService.findAll();
@@ -52,12 +52,12 @@ export class ProducerController {
 
   @Get(':id')
   @ApiOkResponse({
-    description: 'Producer details retrieved successfully.',
+    description: 'Produtor recuperado com sucesso.',
     type: ProducerEntity,
   })
   @ApiOperation({
-    summary: 'Get a producer by ID',
-    description: 'Retrieves the details of a specific producer by their ID.',
+    summary: 'Buscar um produtor por ID',
+    description: 'Busca um produtor específico pelo seu ID.',
   })
   findOne(@Param('id') id: string) {
     return this.producerService.findOne(id);
@@ -65,12 +65,12 @@ export class ProducerController {
 
   @Patch(':id')
   @ApiOkResponse({
-    description: 'Producer updated successfully.',
+    description: 'Produtor atualizado com sucesso.',
     type: ProducerEntity,
   })
   @ApiOperation({
-    summary: 'Update a producer',
-    description: 'Updates the details of an existing producer.',
+    summary: 'Atualizar um produtor',
+    description: 'Atualiza as informações de um produtor existente.',
   })
   update(
     @Param('id') id: string,
@@ -81,12 +81,12 @@ export class ProducerController {
 
   @Delete(':id')
   @ApiOkResponse({
-    description: 'Producer deleted successfully.',
+    description: 'Produtor removido com sucesso.',
     type: String,
   })
   @ApiOperation({
-    summary: 'Delete a producer',
-    description: 'Deletes a specific producer by their ID.',
+    summary: 'Remover um produtor por ID',
+    description: 'Remove um produtor específico pelo seu ID. (soft delete)',
   })
   remove(@Param('id') id: string) {
     return this.producerService.remove(id);

@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProducerDto {
   @ApiProperty({
@@ -38,6 +44,11 @@ export class CreateProducerDto {
     required: true,
   })
   @IsString()
+  @MinLength(2)
+  @MaxLength(2)
+  @Matches(/^[A-Z]{2}$/, {
+    message: 'Estado deve ser uma sigla de 2 letras maiúsculas',
+  })
   @IsNotEmpty()
   state: string;
 }

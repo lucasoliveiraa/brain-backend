@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
+import { FarmEntity } from 'src/modules/farm/entities/farm.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -83,4 +85,7 @@ export class ProducerEntity {
   @Exclude()
   @Column('boolean', { name: 'is_deleted', nullable: true })
   isDeleted: boolean | null;
+
+  @OneToMany(() => FarmEntity, (farm) => farm.producer)
+  farms: FarmEntity[];
 }
