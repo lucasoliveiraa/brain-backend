@@ -39,22 +39,6 @@ export class ProducerEntity {
   name: string;
 
   @ApiProperty({
-    description: 'Cidade do produtor',
-    type: 'string',
-    example: 'Sao Paulo',
-  })
-  @Column()
-  city: string;
-
-  @ApiProperty({
-    description: 'Estado do produtor',
-    type: 'string',
-    example: 'SP',
-  })
-  @Column()
-  state: string;
-
-  @ApiProperty({
     description: 'Data de criação',
     type: 'string',
     format: 'date-time',

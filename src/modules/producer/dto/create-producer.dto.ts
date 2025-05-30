@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsNotEmpty,
-  IsString,
-  Matches,
-  MaxLength,
-  MinLength,
-} from 'class-validator';
+import { IsNotEmpty, IsString, Matches, Validate } from 'class-validator';
+import { IsCpfOrCnpj } from 'src/shared/validators/is-cpf-or-cnpj.validator';
 
 export class CreateProducerDto {
   @ApiProperty({
@@ -18,6 +13,7 @@ export class CreateProducerDto {
   @Matches(/^(\d{11}|\d{14})$/, {
     message: 'CPF ou CNPJ deve conter 11 ou 14 dígitos',
   })
+  @Validate(IsCpfOrCnpj)
   cpfCnpj: string;
 
   @ApiProperty({
@@ -28,27 +24,4 @@ export class CreateProducerDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  @ApiProperty({
-    description: 'Cidade do produtor',
-    example: 'Sao Paulo',
-    required: true,
-  })
-  @IsString()
-  @IsNotEmpty()
-  city: string;
-
-  @ApiProperty({
-    description: 'Estado do produtor',
-    example: 'SP',
-    required: true,
-  })
-  @IsString()
-  @MinLength(2)
-  @MaxLength(2)
-  @Matches(/^[A-Z]{2}$/, {
-    message: 'Estado deve ser uma sigla de 2 letras maiúsculas',
-  })
-  @IsNotEmpty()
-  state: string;
 }
