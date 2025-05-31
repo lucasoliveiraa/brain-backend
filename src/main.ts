@@ -37,7 +37,13 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('v1/brain/doc', app, document);
+  SwaggerModule.setup('v1/brain/doc', app, document, {
+    swaggerOptions: {
+      docExpansion: 'none',
+      tagsSorter: 'alpha',
+      operationsSorter: 'method',
+    },
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 
